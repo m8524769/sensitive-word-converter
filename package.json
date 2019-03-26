@@ -1,7 +1,7 @@
 {
   "name": "sensitive-word-converter",
   "version": "1.0.0",
-  "description": "Sensitive Word Converter",
+  "description": "A sensitive word converter/validator based on DFA.",
   "main": "src/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",

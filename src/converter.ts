@@ -64,22 +64,22 @@ export class Converter {
       if (source[i] != substitute && this.sensitiveWordMap.has(source[i])) {
         let subMap = this.sensitiveWordMap.get(source[i]);
         if (subMap.get('isEnd')) {  // Single character
-          console.log('Found ' + source[i]);
-          console.log('ReplaceTo ' + substitute);
+          // console.log('Found ' + source[i]);
+          // console.log('ReplaceTo ' + substitute);
           target = target.replace(source[i], substitute);
-          console.log('Result ' + target);
+          // console.log('Result ' + target);
         }
         for (let j = i+1; j < source.length; j++) {
           if (subMap.has(source[j])) {
             subMap = subMap.get(source[j]);
             if (subMap.get('isEnd')) {
-              console.log('Found ' + source.substring(i, j + 1));
-              console.log('ReplaceTo ' + substitute.repeat(j - i + 1));
+              // console.log('Found ' + source.substring(i, j + 1));
+              // console.log('ReplaceTo ' + substitute.repeat(j - i + 1));
               target = target.replace(
                 source.substring(i, j + 1),
                 substitute.repeat(j - i + 1)
               );
-              console.log('Result ' + target);
+              // console.log('Result ' + target);
               break;
             }
           } else {
