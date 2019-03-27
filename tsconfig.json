@@ -5,11 +5,15 @@
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "dist",
-    "sourceMap": true
+    "outDir": "lib",
+    "sourceMap": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./typings"
+    ]
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
   ],
   "exclude": [
     "node_modules",
