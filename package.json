@@ -2,23 +2,26 @@
   "name": "sensitive-word-converter",
   "version": "1.0.1",
   "description": "A sensitive word converter/validator based on DFA.",
-  "main": "dist/index.js",
+  "main": "./lib/index.js",
+  "typings": "./typings/index.d.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "test": "mocha --require ts-node/register tests/**/*.ts"
+    "test": "mocha --require ts-node/register tests/**/*.ts",
+    "build": "tsc"
   },
-  "git repository": "https://github.com/m8524769/sensitive-word-converter",
+  "repository": "github:m8524769/sensitive-word-converter",
   "keywords": [
     "sensetive word",
+    "敏感词",
     "DFA",
     "TypeScript"
   ],
   "author": "yk <m8524769@gmail.com>",
   "license": "ISC",
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^11.11.6",
+    "@types/node": "^11.12.0",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "ts-node": "^8.0.3",
