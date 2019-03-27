@@ -2,11 +2,17 @@
   "name": "sensitive-word-converter",
   "version": "1.0.0",
   "description": "A sensitive word converter/validator based on DFA.",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "mocha --require ts-node/register tests/**/*.ts"
   },
+  "git repository": "https://github.com/m8524769/sensitive-word-converter",
+  "keywords": [
+    "sensetive word",
+    "DFA",
+    "TypeScript"
+  ],
   "author": "yk <m8524769@gmail.com>",
   "license": "ISC",
   "devDependencies": {

@@ -24,7 +24,7 @@ export class Converter {
         }
         subMap.set('isEnd', true);
       }
-    })
+    });
   }
 
   validate(source: string): Object {
