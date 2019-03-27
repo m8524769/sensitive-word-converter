@@ -4,27 +4,64 @@ import * as readline from 'readline';
 export class Converter {
 
   private sensitiveWordMap: Map<string, any> = new Map();
+  public ready: Promise<any>;
 
   constructor(filePath: string) {
-    const lineReader = readline.createInterface({
-      input: fs.createReadStream(
-        filePath, { encoding: 'UTF-8' }
-      )
-    });
-    lineReader.on('line', line => {
-      if (line) {
-        let subMap = this.sensitiveWordMap;
-        for (let c of line) {
-          if (!subMap.has(c)) {
-            subMap.set(c, new Map([
-              ['isEnd', false]
-            ]));
+    this.ready = new Promise((resolve, reject) => {
+      try {
+        readline.createInterface({
+          input: fs.createReadStream(
+            filePath, { encoding: 'UTF-8' }
+          )
+        }).on('line', line => {
+          if (line) {
+            let subMap = this.sensitiveWordMap;
+            for (const c of line) {
+              if (!subMap.has(c)) {
+                subMap.set(c, new Map([
+                  ['isEnd', false]
+                ]));
+              }
+              subMap = subMap.get(c);
+            }
+            subMap.set('isEnd', true);
           }
-          subMap = subMap.get(c);
-        }
-        subMap.set('isEnd', true);
+        }).once('close', () => {
+          resolve(undefined);
+        });
+      } catch (error) {
+        reject(error);
       }
     });
+  }
+
+  convert(source: string, substitute: string = '*'): string {
+    let target: string = source;
+    for (let i = 0; i < source.length; i++) {
+      if (source[i] != substitute && this.sensitiveWordMap.has(source[i])) {
+        let subMap = this.sensitiveWordMap.get(source[i]);
+        if (subMap.get('isEnd')) {  // Single character
+          // console.log(`${i}: ${source[i]} -> ${substitute}`);
+          target = target.replace(source[i], substitute);
+        }
+        for (let j = i+1; j < source.length; j++) {
+          if (subMap.has(source[j])) {
+            subMap = subMap.get(source[j]);
+            if (subMap.get('isEnd')) {
+              // console.log(`${i}: ${source.substring(i, j + 1)} -> ${substitute.repeat(j - i + 1)}`);
+              target = target.replace(
+                source.substring(i, j + 1),
+                substitute.repeat(j - i + 1)
+              );
+              break;
+            }
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    return target;
   }
 
   validate(source: string): Object {
@@ -33,7 +70,7 @@ export class Converter {
     for (let i = 0; i < source.length; i++) {
       if (this.sensitiveWordMap.has(source[i])) {
         let subMap = this.sensitiveWordMap.get(source[i]);
-        if (subMap.get('isEnd')) {  // Single character
+        if (subMap.get('isEnd')) {
           sensitiveWords.add(source[i]);
           pass = false;
         }
@@ -55,40 +92,6 @@ export class Converter {
       "pass": pass,
       "sensitiveWords": sensitiveWords
     };
-  }
-
-  convert(source: string, substitute: string = '*'): string {
-    // console.log(this.sensitiveWordMap);
-    let target: string = source;
-    for (let i = 0; i < source.length; i++) {
-      if (source[i] != substitute && this.sensitiveWordMap.has(source[i])) {
-        let subMap = this.sensitiveWordMap.get(source[i]);
-        if (subMap.get('isEnd')) {  // Single character
-          // console.log('Found ' + source[i]);
-          // console.log('ReplaceTo ' + substitute);
-          target = target.replace(source[i], substitute);
-          // console.log('Result ' + target);
-        }
-        for (let j = i+1; j < source.length; j++) {
-          if (subMap.has(source[j])) {
-            subMap = subMap.get(source[j]);
-            if (subMap.get('isEnd')) {
-              // console.log('Found ' + source.substring(i, j + 1));
-              // console.log('ReplaceTo ' + substitute.repeat(j - i + 1));
-              target = target.replace(
-                source.substring(i, j + 1),
-                substitute.repeat(j - i + 1)
-              );
-              // console.log('Result ' + target);
-              break;
-            }
-          } else {
-            break;
-          }
-        }
-      }
-    }
-    return target;
   }
 
 }

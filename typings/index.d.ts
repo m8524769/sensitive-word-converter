@@ -1,6 +1,11 @@
 export declare class Converter {
 
   /**
+   * Whether the Converter is ready to work.
+   */
+  ready: Promise<any>
+
+  /**
    *
    * @param filePath A text file containing sensitive words. (one word for each line)
    */
