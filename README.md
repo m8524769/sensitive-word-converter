@@ -2,9 +2,9 @@
 
 A sensitive word converter/validator based on DFA.
 
-![Azure DevOps builds](https://img.shields.io/azure-devops/build/yk0537/sensitive-word-converter/1.svg?style=flat-square)
-![npm](https://img.shields.io/npm/v/sensitive-word-converter.svg?style=flat-square)
-![npm](https://img.shields.io/npm/dt/sensitive-word-converter.svg?style=flat-square)
+[![Azure DevOps builds](https://img.shields.io/azure-devops/build/yk0537/sensitive-word-converter/1.svg?style=flat-square)](https://dev.azure.com/yk0537/sensitive-word-converter)
+[![npm](https://img.shields.io/npm/v/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
+[![npm](https://img.shields.io/npm/dt/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
 
 ### Getting Started
 
@@ -55,5 +55,15 @@ converter.ready.then(() => {
 - [ ] Random substitute symbol
 - [ ] Craw word list with Python
 - [ ] Construct the Converter with fileURL
+
+### For Developers/Testers
+
+```shell
+$ git clone --depth=1 https://github.com/m8524769/sensitive-word-converter.git
+$ cd ./sensitive-word-converter
+$ npm i --dev
+$ npm run build
+$ npm test
+```
 
 ### [ISC License](LICENSE)
