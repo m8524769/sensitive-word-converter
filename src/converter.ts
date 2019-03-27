@@ -5,7 +5,7 @@ export class Converter {
 
   private sensitiveWordMap: Map<string, any> = new Map();
 
-  constructor(filePath: string = 'sensitiveWords.txt') {
+  constructor(filePath: string) {
     const lineReader = readline.createInterface({
       input: fs.createReadStream(
         filePath, { encoding: 'UTF-8' }

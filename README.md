@@ -1,4 +1,4 @@
-# Sensitive Word Converter
+# Sensitive Word Converter (still under development, do not download)
 
 A sensitive word converter/validator based on DFA.
 
