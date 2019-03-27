@@ -32,11 +32,28 @@ converter.ready.then(() => {
   let s2 = converter.convert('哈哈哈哈啪！', '喵');
   console.log(s2);  // 喵喵喵喵啪！
 
-  // String verification
+  // String validation
   let r0 = converter.validate('Hello World');
   console.log(r0);  // { pass: false, sensitiveWords: Set { 'He', 'World' } }
 
 })
 ```
+
+### Sensitive Words Example
+
+- [fwwdn/sensitive-stop-words](https://github.com/fwwdn/sensitive-stop-words)
+
+- [observerss/textfilter](https://github.com/observerss/textfilter)
+
+- [57ing/Sensitive-word](https://github.com/57ing/Sensitive-word)
+
+- [qloog/sensitive_words](https://github.com/qloog/sensitive_words)
+
+### Todo List
+
+- [X] String validation
+- [ ] Random substitute symbol
+- [ ] Craw word list with Python
+- [ ] Construct the Converter with fileURL
 
 ### [ISC License](LICENSE)
