@@ -21,3 +21,6 @@
 .DS_Store
 Thumbs.db
 
+# Nyc Report
+/.nyc_output
+/coverage
