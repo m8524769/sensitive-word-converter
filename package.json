@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
   "scripts": {
-    "test": "nyc mocha --require ts-node/register tests/**/*.ts",
+    "test": "nyc mocha",
     "build": "tsc"
   },
   "repository": "github:m8524769/sensitive-word-converter",
@@ -25,6 +25,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",
+    "source-map-support": "^0.5.11",
     "ts-node": "^8.0.3",
     "typescript": "^3.3.4000"
   },
