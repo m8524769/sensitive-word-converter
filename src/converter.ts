@@ -4,10 +4,10 @@ import * as readline from 'readline';
 export class Converter {
 
   private sensitiveWordMap: Map<string, any> = new Map();
-  public ready: Promise<any>;
+  public isReady: Promise<any>;
 
   constructor(filePath: string) {
-    this.ready = new Promise((resolve, reject) => {
+    this.isReady = new Promise((resolve, reject) => {
       try {
         readline.createInterface({
           input: fs.createReadStream(

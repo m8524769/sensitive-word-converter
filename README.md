@@ -13,12 +13,13 @@ $ npm i sensitive-word-converter
 ```
 
 ### Usage
+
 ```typescript
 import { Converter } from 'sensitive-word-converter';
 
 // A text file containing sensitive words is required
 const converter = new Converter('./sensitiveWords.txt');
-converter.ready.then(() => {
+converter.isReady.then(() => {
 
   // Sensitive word: He, World
   let s0 = converter.convert('Hello World');

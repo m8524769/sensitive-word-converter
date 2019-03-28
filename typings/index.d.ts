@@ -3,7 +3,7 @@ export declare class Converter {
   /**
    * Whether the Converter is ready to work.
    */
-  ready: Promise<any>
+  isReady: Promise<any>
 
   /**
    *
