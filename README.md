@@ -2,7 +2,7 @@
 
 A sensitive word converter/validator based on DFA.
 
-[![Azure DevOps builds](https://img.shields.io/azure-devops/build/yk0537/sensitive-word-converter/1.svg?style=flat-square)](https://dev.azure.com/yk0537/sensitive-word-converter)
+[![Travis (.org)](https://img.shields.io/travis/m9524769/sensitive-word-converter.svg?style=flat-square)](https://travis-ci.org/m8524769/sensitive-word-converter)
 [![npm](https://img.shields.io/npm/v/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
 [![npm](https://img.shields.io/npm/dt/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
 
