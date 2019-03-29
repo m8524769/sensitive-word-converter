@@ -5,6 +5,7 @@ A sensitive word converter/validator based on DFA.
 [![Travis (.com)](https://img.shields.io/travis/com/m8524769/sensitive-word-converter.svg?style=flat-square)](https://travis-ci.com/m8524769/sensitive-word-converter)
 [![npm](https://img.shields.io/npm/v/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
 [![npm](https://img.shields.io/npm/dt/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fm8524769%2Fsensitive-word-converter.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fm8524769%2Fsensitive-word-converter?ref=badge_shield)
 
 ### Getting Started
 
@@ -68,3 +69,6 @@ $ npm test
 ```
 
 ### [ISC License](LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fm8524769%2Fsensitive-word-converter.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fm8524769%2Fsensitive-word-converter?ref=badge_large)
