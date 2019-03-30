@@ -21,13 +21,13 @@
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^11.12.0",
+    "@types/node": "^11.12.2",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",
     "source-map-support": "^0.5.11",
     "ts-node": "^8.0.3",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.4.1"
   },
   "nyc": {
     "extension": [
@@ -37,7 +37,8 @@
     "exclude": [
       "**/*.d.ts",
       "coverage",
-      "lib"
+      "lib",
+      "test"
     ],
     "reporter": [
       "html"
