@@ -7,9 +7,9 @@ export declare class Converter {
 
   /**
    *
-   * @param filePath A text file containing sensitive words. (one word for each line)
+   * @param url Path of a text file containing sensitive words, one word for each line. (Local file is recommended)
    */
-  constructor(filePath: string)
+  constructor(url: string)
 
   /**
    * Returns a string whose sensitive words were replaced by substitutes.

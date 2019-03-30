@@ -1,38 +1,61 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
+import * as http from 'https';
 
 export class Converter {
 
   private sensitiveWordMap: Map<string, any> = new Map();
-  public isReady: Promise<any>;
+  public isReady: Promise<Converter>;
 
-  constructor(filePath: string) {
+  constructor(url: string) {
     this.isReady = new Promise((resolve, reject) => {
-      try {
-        readline.createInterface({
-          input: fs.createReadStream(
-            filePath, { encoding: 'UTF-8' }
-          )
-        }).on('line', line => {
-          if (line) {
-            let subMap = this.sensitiveWordMap;
-            for (const c of line) {
-              if (!subMap.has(c)) {
-                subMap.set(c, new Map([
-                  ['isEnd', false]
-                ]));
-              }
-              subMap = subMap.get(c);
+      if (fs.existsSync(url)) {
+        try {
+          readline.createInterface({
+            input: fs.createReadStream(
+              url, { encoding: 'UTF-8' }
+            )
+          }).on('line', line => {
+            if (line) {
+              this.addWordToMap(line);
             }
-            subMap.set('isEnd', true);
-          }
-        }).once('close', () => {
-          resolve(undefined);
+          }).once('close', () => {
+            resolve(this);
+          });
+        } catch (error) {
+          reject(error);
+        }
+      } else {  // No local file
+        http.get(url, response => {
+          let rawData: string = '';
+          response.on('data', chunk => {
+            rawData += chunk;
+          }).on('end', () => {
+            for (const line of rawData.split('\n')) {
+              if (line) {
+                this.addWordToMap(line);
+              }
+            }
+            resolve(this);
+          });
+        }).on('error', error => {
+          reject(error);
         });
-      } catch (error) {
-        reject(error);
       }
     });
+  }
+
+  addWordToMap(word: string) {
+    let subMap = this.sensitiveWordMap;
+    for (const char of word.trim()) {
+      if (!subMap.has(char)) {
+        subMap.set(char, new Map([
+          ['isEnd', false]
+        ]));
+      }
+      subMap = subMap.get(char);
+    }
+    subMap.set('isEnd', true);
   }
 
   convert(source: string, substitute: string = '*'): string {
@@ -53,6 +76,7 @@ export class Converter {
                 source.substring(i, j + 1),
                 substitute.repeat(j - i + 1)
               );
+              i = j;
               break;
             }
           } else {
@@ -80,6 +104,7 @@ export class Converter {
             if (subMap.get('isEnd')) {
               sensitiveWords.add(source.substring(i, j + 1));
               pass = false;
+              i = j;
               break;
             }
           } else {
