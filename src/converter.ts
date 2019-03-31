@@ -9,7 +9,7 @@ export class Converter {
 
   constructor(...urls: string[]) {
     const requests: Promise<Converter>[] = [];
-    urls.forEach(url => {
+    Array.from(new Set(urls)).forEach(url => {  // Deduplication
       requests.push(new Promise((resolve, reject) => {
         if (fs.existsSync(url)) {  // Check local file
           try {
