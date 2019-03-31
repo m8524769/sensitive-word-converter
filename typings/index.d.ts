@@ -6,10 +6,10 @@ export declare class Converter {
   isReady: Promise<any>
 
   /**
-   * @param {string} url Path of a text file containing sensitive words, one word for each line. (Local file is recommended)
+   * @param {string[]} urls Paths of text files containing sensitive words, one word for each line. (Local file is recommended)
    * @constructor A sensitive word converter
    */
-  constructor(url: string)
+  constructor(...urls: string[])
 
   /**
    * @param {string} source The string you want to convert.

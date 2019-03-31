@@ -1,48 +1,54 @@
 import * as fs from 'fs';
 import * as readline from 'readline';
-import * as http from 'https';
+import * as https from 'https';
 
 export class Converter {
 
   private _sensitiveWordMap: Map<string, any> = new Map();
-  public isReady: Promise<Converter>;
+  public isReady: Promise<Converter[]>;
 
-  constructor(url: string) {
-    this.isReady = new Promise((resolve, reject) => {
-      if (fs.existsSync(url)) {
-        try {
-          readline.createInterface({
-            input: fs.createReadStream(
-              url, { encoding: 'UTF-8' }
-            )
-          }).on('line', line => {
-            if (line) {
-              this._addWordToMap(line);
-            }
-          }).once('close', () => {
-            resolve(this);
-          });
-        } catch (error) {
-          reject(error);
-        }
-      } else {  // No local file
-        http.get(url, response => {
-          let rawData: string = '';
-          response.on('data', chunk => {
-            rawData += chunk;
-          }).on('end', () => {
-            for (const line of rawData.split('\n')) {
+  constructor(...urls: string[]) {
+    const requests: Promise<Converter>[] = [];
+    urls.forEach(url => {
+      requests.push(new Promise((resolve, reject) => {
+        if (fs.existsSync(url)) {  // Check local file
+          try {
+            readline.createInterface({
+              input: fs.createReadStream(
+                url, { encoding: 'UTF-8' }
+              )
+            }).on('line', line => {
               if (line) {
                 this._addWordToMap(line);
               }
-            }
-            resolve(this);
+            }).once('close', () => {
+              resolve(this);
+            });
+          } catch (error) {
+            reject(error);
+          }
+        } else if (/^https:\/\/.+/.test(url)) {  // HTTPS only
+          https.get(url, response => {
+            let rawData: string = '';
+            response.on('data', chunk => {
+              rawData += chunk;
+            }).on('end', () => {
+              for (const line of rawData.split('\n')) {
+                if (line) {
+                  this._addWordToMap(line);
+                }
+              }
+              resolve(this);
+            });
+          }).on('error', error => {
+            reject(error);
           });
-        }).on('error', error => {
-          reject(error);
-        });
-      }
+        } else {  // Invalid URL
+          reject(`The URL: '${url}' is invalid or no such file, please check. (Only support HTTPS)`);
+        }
+      }));
     });
+    this.isReady = Promise.all(requests);
   }
 
   _addWordToMap(word: string): void {
@@ -67,7 +73,7 @@ export class Converter {
           // console.log(`${i}: ${source[i]} -> ${substitute}`);
           target = target.replace(source[i], substitute);
         }
-        for (let j = i+1; j < source.length; j++) {
+        for (let j = i + 1; j < source.length; j++) {
           if (subMap.has(source[j])) {
             subMap = subMap.get(source[j]);
             if (subMap.get('isEnd')) {
@@ -98,7 +104,7 @@ export class Converter {
           sensitiveWords.add(source[i]);
           pass = false;
         }
-        for (let j = i+1; j < source.length; j++) {
+        for (let j = i + 1; j < source.length; j++) {
           if (subMap.has(source[j])) {
             subMap = subMap.get(source[j]);
             if (subMap.get('isEnd')) {
