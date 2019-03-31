@@ -4,7 +4,7 @@ import * as http from 'https';
 
 export class Converter {
 
-  private sensitiveWordMap: Map<string, any> = new Map();
+  private _sensitiveWordMap: Map<string, any> = new Map();
   public isReady: Promise<Converter>;
 
   constructor(url: string) {
@@ -17,7 +17,7 @@ export class Converter {
             )
           }).on('line', line => {
             if (line) {
-              this.addWordToMap(line);
+              this._addWordToMap(line);
             }
           }).once('close', () => {
             resolve(this);
@@ -33,7 +33,7 @@ export class Converter {
           }).on('end', () => {
             for (const line of rawData.split('\n')) {
               if (line) {
-                this.addWordToMap(line);
+                this._addWordToMap(line);
               }
             }
             resolve(this);
@@ -45,8 +45,8 @@ export class Converter {
     });
   }
 
-  addWordToMap(word: string) {
-    let subMap = this.sensitiveWordMap;
+  _addWordToMap(word: string): void {
+    let subMap = this._sensitiveWordMap;
     for (const char of word.trim()) {
       if (!subMap.has(char)) {
         subMap.set(char, new Map([
@@ -61,8 +61,8 @@ export class Converter {
   convert(source: string, substitute: string = '*'): string {
     let target: string = source;
     for (let i = 0; i < source.length; i++) {
-      if (source[i] != substitute && this.sensitiveWordMap.has(source[i])) {
-        let subMap = this.sensitiveWordMap.get(source[i]);
+      if (source[i] != substitute && this._sensitiveWordMap.has(source[i])) {
+        let subMap = this._sensitiveWordMap.get(source[i]);
         if (subMap.get('isEnd')) {  // Single character
           // console.log(`${i}: ${source[i]} -> ${substitute}`);
           target = target.replace(source[i], substitute);
@@ -92,8 +92,8 @@ export class Converter {
     let pass: boolean = true;
     let sensitiveWords: Set<string> = new Set();
     for (let i = 0; i < source.length; i++) {
-      if (this.sensitiveWordMap.has(source[i])) {
-        let subMap = this.sensitiveWordMap.get(source[i]);
+      if (this._sensitiveWordMap.has(source[i])) {
+        let subMap = this._sensitiveWordMap.get(source[i]);
         if (subMap.get('isEnd')) {
           sensitiveWords.add(source[i]);
           pass = false;
