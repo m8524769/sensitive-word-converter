@@ -1,7 +1,7 @@
 {
   "name": "sensitive-word-converter",
   "version": "1.2.0",
-  "description": "A sensitive word converter/validator based on DFA.",
+  "description": "An asynchronous sensitive word converter/validator based on DFA.",
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
   "scripts": {
