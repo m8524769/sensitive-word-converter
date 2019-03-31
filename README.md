@@ -1,6 +1,6 @@
 # Sensitive Word Converter
 
-A sensitive word converter/validator based on DFA.
+An asynchronous sensitive word converter/validator based on DFA.
 
 [![Travis (.com)](https://img.shields.io/travis/com/m8524769/sensitive-word-converter.svg?style=flat-square)](https://travis-ci.com/m8524769/sensitive-word-converter)
 [![npm](https://img.shields.io/npm/v/sensitive-word-converter.svg?style=flat-square)](https://www.npmjs.com/package/sensitive-word-converter)
@@ -17,8 +17,13 @@ $ npm i sensitive-word-converter
 ```typescript
 import { Converter } from 'sensitive-word-converter';
 
-// A text file containing sensitive words is required (can be an url)
-const converter = new Converter('./sensitiveWords.txt');
+// At least one text file containing sensitive words is required
+const converter = new Converter(  // Local file paths or URLs
+  './sensitiveWords.txt',
+  'https://raw.githubusercontent.com/observerss/textfilter/master/keywords',
+  // ...
+);
+
 converter.isReady.then(() => {
 
   // Sensitive word: He, World
@@ -53,6 +58,8 @@ converter.isReady.then(() => {
 
 - [qloog/sensitive_words](https://github.com/qloog/sensitive_words)
 
+- [jim19930609/Twitter-Sensitive-Word-Detection](https://github.com/jim19930609/Twitter-Sensitive-Word-Detection)
+
 ### Todo List
 
 - [X] String validation
@@ -60,7 +67,8 @@ converter.isReady.then(() => {
 - [ ] Craw word list with Python
 - [X] Construct the Converter with fileURL
 - [ ] Ignore special symbols in strings
-- [ ] Add support for multi-file word lists
+- [X] Add support for multi-file word lists
+- [ ] Set timeout for each request
 
 ### For Developers/Testers
 
