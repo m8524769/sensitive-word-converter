@@ -9,6 +9,10 @@
     "build": "tsc"
   },
   "repository": "github:m8524769/sensitive-word-converter",
+  "bugs": {
+    "url": "https://github.com/m8524769/sensitive-word-converter/issues",
+    "email": "m8524769@gmail.com"
+  },
   "keywords": [
     "sensetive word",
     "敏感词",
