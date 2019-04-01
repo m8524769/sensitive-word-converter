@@ -29,6 +29,11 @@ export class Converter {
           }
         } else if (/^https:\/\/.+/.test(url)) {  // HTTPS only
           https.get(url, response => {
+            if (response.statusCode != 200) {
+              reject(new Error(
+                `${response.statusCode} ${response.statusMessage} on '${url}'`
+              ));
+            }
             let rawData: string = '';
             response.on('data', chunk => {
               rawData += chunk;
@@ -44,7 +49,9 @@ export class Converter {
             reject(error);
           });
         } else {  // Invalid URL
-          reject(`The URL: '${url}' is invalid or no such file, please check. (Only support HTTPS)`);
+          reject(new Error(
+            `'${url}' is an invalid path or no such file, please check. (Only support HTTPS)`
+          ));
         }
       }));
     });
