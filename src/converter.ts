@@ -9,7 +9,7 @@ export class Converter {
 
   constructor(...urls: string[]) {
     const requests: Promise<Converter>[] = [];
-    Array.from(new Set(urls)).forEach(url => {  // Deduplication
+    new Set(urls).forEach(url => {  // Deduplication
       requests.push(new Promise((resolve, reject) => {
         if (fs.existsSync(url)) {  // Check local file
           try {
@@ -27,7 +27,7 @@ export class Converter {
           } catch (error) {
             reject(error);
           }
-        } else if (/^https:\/\/.+/.test(url)) {  // HTTPS only
+        } else if (url.startsWith('https://')) {  // HTTPS only
           https.get(url, response => {
             if (response.statusCode != 200) {
               reject(new Error(
@@ -76,7 +76,7 @@ export class Converter {
     for (let i = 0; i < source.length; i++) {
       if (source[i] != substitute && this._sensitiveWordMap.has(source[i])) {
         let subMap = this._sensitiveWordMap.get(source[i]);
-        if (subMap.get('isEnd')) {  // Single character
+        if (subMap.get('isEnd')) {  // Match single character
           // console.log(`${i}: ${source[i]} -> ${substitute}`);
           target = target.replace(source[i], substitute);
         }
