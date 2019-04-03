@@ -5,57 +5,57 @@ import * as https from 'https';
 export class Converter {
 
   private _sensitiveWordMap: Map<string, any> = new Map();
-  public isReady: Promise<Converter[]>;
+  public isReady: Promise<Converter>;
 
   constructor(...urls: string[]) {
-    const requests: Promise<Converter>[] = [];
-    new Set(urls).forEach(url => {  // Deduplication
-      requests.push(new Promise((resolve, reject) => {
-        if (fs.existsSync(url)) {  // Check local file
-          try {
-            readline.createInterface({
-              input: fs.createReadStream(
-                url, { encoding: 'UTF-8' }
-              )
-            }).on('line', line => {
-              if (line) {
-                this._addWordToMap(line);
-              }
-            }).once('close', () => {
-              resolve(this);
-            });
-          } catch (error) {
-            reject(error);
-          }
-        } else if (url.startsWith('https://')) {  // HTTPS only
-          https.get(url, response => {
-            if (response.statusCode != 200) {
-              reject(new Error(
-                `${response.statusCode} ${response.statusMessage} on '${url}'`
-              ));
-            }
-            let rawData: string = '';
-            response.on('data', chunk => {
-              rawData += chunk;
-            }).on('end', () => {
-              for (const line of rawData.split('\n')) {
+    this.isReady = Promise.all(
+      Array.from(new Set(urls), url => new Promise(  // Deduplication
+        (resolve, reject) => {
+          if (fs.existsSync(url)) {  // Check local file
+            try {
+              readline.createInterface({
+                input: fs.createReadStream(
+                  url, { encoding: 'UTF-8' }
+                )
+              }).on('line', line => {
                 if (line) {
                   this._addWordToMap(line);
                 }
+              }).once('close', () => {
+                resolve();
+              });
+            } catch (error) {
+              reject(error);
+            }
+          } else if (url.startsWith('https://')) {  // HTTPS only
+            https.get(url, response => {
+              if (response.statusCode != 200) {
+                reject(new Error(
+                  `${response.statusCode} ${response.statusMessage} on '${url}'`
+                ));
               }
-              resolve(this);
+              let rawData: string = '';
+              response.on('data', chunk => {
+                rawData += chunk;
+              }).on('end', () => {
+                for (const line of rawData.split('\n')) {
+                  if (line) {
+                    this._addWordToMap(line);
+                  }
+                }
+                resolve();
+              });
+            }).on('error', error => {
+              reject(error);
             });
-          }).on('error', error => {
-            reject(error);
-          });
-        } else {  // Invalid URL
-          reject(new Error(
-            `'${url}' is an invalid path or no such file, please check. (Only support HTTPS)`
-          ));
-        }
-      }));
-    });
-    this.isReady = Promise.all(requests);
+          } else {  // Invalid URL
+            reject(new Error(
+              `'${url}' is an invalid path or no such file, please check. (Only support HTTPS)`
+            ));
+          }
+        })
+      )
+    ).then(_ => this);  // Return the converter
   }
 
   _addWordToMap(word: string): void {
