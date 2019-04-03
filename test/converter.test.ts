@@ -1,40 +1,54 @@
 import { Converter } from '../src';
 import { expect } from 'chai';
 
-describe("Converter test", () => {
+describe('Converter', () => {
 
-  // Only support local file test
-  const converter = new Converter('./sensitiveWords.txt');
+  let cvt: Converter;
 
-  it("Test 0", () => {
-    const source = 'hhhhhhhychhh';
-    const target = 'hhhhhh***hhh';
-    expect(converter.convert(source)).to.equal(target);
+  before(async () => {
+    await new Converter(
+      './sensitiveWords.txt',
+      'https://raw.githubusercontent.com/fwwdn/sensitive-stop-words/master/%E5%B9%BF%E5%91%8A.txt'
+    ).isReady.then(converter => {
+      cvt = converter;
+    });
   });
 
-  it("Test 1", () => {
-    const source = 'hello worlds';
-    const target = '**llo *****s';
-    expect(converter.convert(source)).to.equal(target);
+  describe('#convert()', () => {
+
+    let tests = [
+      {
+        name: 'he, world',
+        args: ['hello world'],
+        expect: '**llo *****'
+      },
+      {
+        name: '哈 -> 喵',
+        args: ['哈哈哈哈啪！', '喵'],
+        expect: '喵喵喵喵啪！'
+      },
+      {
+        name: '你好骚啊',
+        args: ['你好骚啊！'],
+        expect: '****！'
+      },
+    ]
+
+    tests.forEach(test => {
+      it(test.name, () => {
+        expect(cvt.convert.apply(cvt, test.args))
+          .to.equal(test.expect);
+      })
+    })
+
   });
 
-  it("Test 2", () => {
-    const source = '哈哈哈哈啪！';
-    const target = '喵喵喵喵啪！';
-    expect(converter.convert(source, '喵')).to.equal(target);
-  });
-
-  it("Test 3", () => {
-    const source = '你好骚啊！';
-    const target = '****！';
-    expect(converter.convert(source)).to.equal(target);
-  });
-
-  it("Validation Test", () => {
-    const source = 'hello worlds';
-    const returnValue = converter.validate(source);
-    expect(returnValue).to.include({
-      pass: false
+  describe('#validate()', () => {
+    it('hello world', () => {
+      expect(cvt.validate('hello world'))
+        .to.include({
+          pass: false
+        });
     });
   });
 
