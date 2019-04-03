@@ -5,8 +5,10 @@
   "main": "./lib/index.js",
   "typings": "./typings/index.d.ts",
   "scripts": {
+    "start": "npm run build",
     "test": "nyc mocha",
-    "build": "tsc"
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "repository": "github:m8524769/sensitive-word-converter",
   "bugs": {
@@ -25,7 +27,7 @@
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^11.12.2",
+    "@types/node": "^11.13.0",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",
